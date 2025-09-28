@@ -1,0 +1,108 @@
+# Cursor Rules for aurenworks-schemas
+
+## Project Overview
+Contracts repo for the AurenWorks platform. Contains **JSON Schemas**, **OpenAPI**, and **MCP descriptor schemas** (tools/resources/prompts). Artifacts are consumed by API, Studio, Portal, Worker, and Docs.
+
+---
+
+## Core Technical Rules (from AGENTS.md)
+
+### Security & Compliance (NON‑NEGOTIABLE)
+- **Never store secrets** in examples, tests, or docs.
+- **No real endpoints** or tokens; use placeholders and synthetic IDs.
+- Avoid PII entirely in fixtures.
+- Dependencies must be pinned (no floating `latest`).
+
+### Contract Semantics
+- Prefer **additive** changes; avoid breakage. If breaking, bump **major** and document migration.
+- Mark deprecations explicitly with `"deprecated": true` and keep for at least one MINOR before removal.
+- Use `$id` and `$ref` properly; provide stable, versioned `$id` URIs.
+- Keep payloads small and minimal; avoid nesting without need.
+
+### File & Formatting Standards
+- JSON/YAML only; **2‑space indent**, LF endings.
+- Sort object keys where possible for stability in diffs (scripts may enforce).
+- Validate all changes with `npm run validate:*` before committing.
+
+### OpenAPI
+- Keep a **single source** of truth; split files only if references remain resolvable in CI.
+- Lint with **Spectral**; avoid vendor extensions unless justified.
+- Error models should be consistent with platform conventions (code/message/details).
+
+### JSON Schema
+- Include `$schema`, `$id`, `title`, `description`, and examples where relevant.
+- Reuse `$defs` for shared types (IDs, timestamps, role enums).
+- Provide examples that pass validation; add negative tests where helpful.
+
+### MCP Descriptor Schemas
+- Define `Tool`, `Resource`, and `Prompt` descriptor types.
+- Ensure alignment with our OpenAPI so tools map 1:1 to endpoints.
+- Include example bundles under `mcp/examples/`.
+
+### Releases & CI
+- Use **SemVer** for package and `$id` changes.
+- CI must run schema & example validation and OpenAPI linting.
+- Do not publish if validation fails.
+
+---
+
+## Cross-Repository Coordination
+
+### Consumer Impact Analysis
+Before ANY schema changes:
+1. **Identify affected consumers**: Check which repos import/use the schema
+2. **Assess breaking potential**: Will this require consumer code changes?
+3. **Plan migration path**: How will consumers adopt the changes?
+4. **Coordinate timing**: When should consumer repos be updated?
+
+### Breaking Change Protocol
+For MAJOR version changes:
+1. **Open issues** in ALL affected consumer repos
+2. **Create migration guide** with before/after examples
+3. **Set timeline** for consumer updates (typically 2-4 weeks)
+4. **Coordinate releases** across the ecosystem
+5. **Update cross-repo documentation**
+
+### Schema Evolution Rules
+- **Additive only**: New fields must be optional
+- **Deprecation timeline**: Mark deprecated fields, remove after 2+ versions
+- **Backward compatibility**: Old consumers must continue working
+- **Version coordination**: Consumer repos must update before removal
+
+## When Implementing New Contracts
+1. **Security review** – no secrets, no real endpoints.
+2. **Design for compatibility** – additive first; document any breakage.
+3. **Validate & lint** – run all validation scripts locally.
+4. **Cross-repo impact** – assess and document consumer impact.
+5. **Docs** – update README/CHANGELOG and the OpenAPI↔MCP mapping.
+6. **Notify consumers** – list affected repos and actions in the PR.
+
+## Agent Collaboration Guidelines
+
+### File Ownership & Boundaries
+- **jsonschema/**: Core data schemas - coordinate with API team
+- **openapi/**: API specs - coordinate with API and Studio teams  
+- **mcp/**: LLM descriptors - coordinate with Studio and Portal teams
+- **examples/**: Test fixtures - coordinate with all consumer teams
+
+### Communication Protocols
+- **Slack**: Use `#aurenworks-schemas` for real-time coordination
+- **GitHub**: Link cross-repo issues with `Fixes #123 in aurenworks/api`
+- **PRs**: Tag affected teams with `@aurenworks/api-team`
+- **Releases**: Include consumer update requirements in release notes
+
+### Validation Requirements
+- **Pre-commit**: All schemas must validate locally
+- **CI/CD**: Consumer repos must pass with new schemas
+- **Integration tests**: Cross-repo compatibility validation
+- **Documentation**: Update all affected READMEs
+
+---
+
+## Reference Files
+- `AGENTS.md` — Roles/instructions for AI & contributors.
+- `jsonschema/` — Core JSON Schemas.
+- `openapi/` — OpenAPI definitions.
+- `mcp/` — MCP descriptor schemas and examples.
+- `examples/` — Valid payload examples for CI.
+- `CHANGELOG.md` — Breaking changes and migration notes.
