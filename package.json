@@ -1,0 +1,67 @@
+{
+  "name": "@aurenworks/schemas",
+  "version": "1.0.0",
+  "description": "Shared contracts: JSON Schema, OpenAPI, GraphQL, Protobuf, events for AurenWorks platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "jsonschema/",
+    "openapi/",
+    "mcp/",
+    "examples/"
+  ],
+  "scripts": {
+    "dev": "npm run validate:all -- --watch",
+    "validate:all": "npm run validate:schemas && npm run validate:examples && npm run validate:openapi",
+    "validate:schemas": "ajv validate -s jsonschema/**/*.json -d examples/**/*.json",
+    "validate:examples": "node scripts/validate-examples.js",
+    "validate:openapi": "spectral lint openapi/**/*.yaml openapi/**/*.yml",
+    "build": "npm run validate:all && npm run generate:types",
+    "generate:types": "node scripts/generate-types.js",
+    "format": "prettier --write '**/*.{json,yaml,yml,js,ts,md}'",
+    "format:check": "prettier --check '**/*.{json,yaml,yml,js,ts,md}'",
+    "test": "npm run validate:all",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "aurenworks",
+    "schemas",
+    "json-schema",
+    "openapi",
+    "contracts",
+    "types",
+    "validation"
+  ],
+  "author": "AurenWorks Team",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aurenworks/aurenworks-schemas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aurenworks/aurenworks-schemas/issues"
+  },
+  "homepage": "https://github.com/aurenworks/aurenworks-schemas#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^10.1.0",
+    "@stoplight/spectral-cli": "^6.11.0",
+    "ajv": "^8.12.0",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^2.1.1",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
