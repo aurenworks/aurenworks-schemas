@@ -1,0 +1,14 @@
+{
+  "id": "my-project",
+  "name": "My Project",
+  "description": "A sample project for demonstration",
+  "status": "active",
+  "tags": ["web", "api", "production"],
+  "metadata": {
+    "environment": "production",
+    "region": "us-west-2"
+  },
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z",
+  "createdBy": "user_123"
+}

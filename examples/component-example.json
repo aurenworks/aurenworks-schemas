@@ -1,0 +1,23 @@
+{
+  "id": "my-component",
+  "name": "My Component",
+  "description": "A sample component for demonstration",
+  "type": "service",
+  "status": "active",
+  "projectId": "my-project",
+  "config": {
+    "port": 8080,
+    "replicas": 3,
+    "resources": {
+      "cpu": "100m",
+      "memory": "256Mi"
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "framework": "express"
+  },
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z",
+  "createdBy": "user_123"
+}

@@ -1,0 +1,766 @@
+openapi: 3.0.3
+info:
+  title: AurenWorks Control Plane API
+  description: |
+    Control plane API for the AurenWorks platform. This API provides endpoints for managing
+    projects, components, records, and jobs within the AurenWorks ecosystem.
+    
+    ## Authentication
+    All endpoints require authentication via API key or JWT token.
+    
+    ## Rate Limiting
+    API requests are rate limited to 1000 requests per hour per API key.
+    
+    ## Error Handling
+    The API uses standard HTTP status codes and returns error details in a consistent format.
+  version: 0.1.0
+  contact:
+    name: AurenWorks Team
+    url: https://github.com/aurenworks/aurenworks-schemas
+    email: support@auren.dev
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://api.auren.dev/v0
+    description: Production server
+  - url: https://api-staging.auren.dev/v0
+    description: Staging server
+  - url: https://api.example.local/v0
+    description: Local development server
+
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Check the health status of the API
+      operationId: getHealth
+      tags:
+        - System
+      security: []
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: API is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /projects:
+    get:
+      summary: List Projects
+      description: Retrieve a list of projects accessible to the authenticated user
+      operationId: listProjects
+      tags:
+        - Projects
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of projects to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Number of projects to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: status
+          in: query
+          description: Filter projects by status
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProjectStatus'
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create Project
+      description: Create a new project
+      operationId: createProject
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Project created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Project already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /projects/{projectId}:
+    get:
+      summary: Get Project
+      description: Retrieve a specific project by ID
+      operationId: getProject
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update Project
+      description: Update an existing project
+      operationId: updateProject
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectRequest'
+      responses:
+        '200':
+          description: Project updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete Project
+      description: Delete a project and all its associated resources
+      operationId: deleteProject
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '204':
+          description: Project deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /projects/{projectId}/components:
+    get:
+      summary: List Components
+      description: Retrieve components within a project
+      operationId: listComponents
+      tags:
+        - Components
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+        - name: limit
+          in: query
+          description: Maximum number of components to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: Number of components to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: type
+          in: query
+          description: Filter components by type
+          required: false
+          schema:
+            $ref: '#/components/schemas/ComponentType'
+      responses:
+        '200':
+          description: List of components
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create Component
+      description: Create a new component within a project
+      operationId: createComponent
+      tags:
+        - Components
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateComponentRequest'
+      responses:
+        '201':
+          description: Component created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Component'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Component already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          description: Health status of the API
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the health check
+        version:
+          type: string
+          description: API version
+          example: "0.1.0"
+        uptime:
+          type: number
+          description: API uptime in seconds
+          example: 3600
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+        - timestamp
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid request parameters"
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the error occurred
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+        requestId:
+          type: string
+          description: Unique identifier for the request
+          example: "req_123456789"
+
+    Project:
+      type: object
+      required:
+        - id
+        - name
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          minLength: 1
+          maxLength: 64
+          description: Unique identifier for the project
+          example: "my-project"
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the project
+          example: "My Project"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the project
+          example: "A sample project for demonstration"
+        status:
+          $ref: '#/components/schemas/ProjectStatus'
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+          maxItems: 10
+          description: Tags associated with the project
+          example: ["web", "api", "production"]
+        metadata:
+          type: object
+          description: Additional metadata for the project
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the project was last updated
+        createdBy:
+          type: string
+          description: User ID who created the project
+          example: "user_123"
+
+    ProjectStatus:
+      type: string
+      enum: [active, inactive, archived, deleted]
+      description: Status of the project
+
+    CreateProjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the project
+          example: "My Project"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the project
+          example: "A sample project for demonstration"
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+          maxItems: 10
+          description: Tags associated with the project
+          example: ["web", "api", "production"]
+        metadata:
+          type: object
+          description: Additional metadata for the project
+          additionalProperties: true
+
+    UpdateProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the project
+          example: "My Updated Project"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the project
+          example: "An updated description"
+        status:
+          $ref: '#/components/schemas/ProjectStatus'
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 50
+          maxItems: 10
+          description: Tags associated with the project
+          example: ["web", "api", "production"]
+        metadata:
+          type: object
+          description: Additional metadata for the project
+          additionalProperties: true
+
+    ProjectListResponse:
+      type: object
+      required:
+        - projects
+        - total
+        - limit
+        - offset
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        total:
+          type: integer
+          minimum: 0
+          description: Total number of projects matching the query
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Maximum number of projects returned
+        offset:
+          type: integer
+          minimum: 0
+          description: Number of projects skipped
+
+    Component:
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          minLength: 1
+          maxLength: 64
+          description: Unique identifier for the component
+          example: "my-component"
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the component
+          example: "My Component"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the component
+          example: "A sample component for demonstration"
+        type:
+          $ref: '#/components/schemas/ComponentType'
+        status:
+          $ref: '#/components/schemas/ComponentStatus'
+        projectId:
+          type: string
+          pattern: '^[a-zA-Z0-9_-]+$'
+          minLength: 1
+          maxLength: 64
+          description: ID of the project this component belongs to
+          example: "my-project"
+        config:
+          type: object
+          description: Component configuration
+          additionalProperties: true
+        metadata:
+          type: object
+          description: Additional metadata for the component
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the component was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the component was last updated
+        createdBy:
+          type: string
+          description: User ID who created the component
+          example: "user_123"
+
+    ComponentType:
+      type: string
+      enum: [service, database, queue, cache, storage, api, worker, scheduler]
+      description: Type of the component
+
+    ComponentStatus:
+      type: string
+      enum: [active, inactive, deploying, failed, pending]
+      description: Status of the component
+
+    CreateComponentRequest:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the component
+          example: "My Component"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the component
+          example: "A sample component for demonstration"
+        type:
+          $ref: '#/components/schemas/ComponentType'
+        config:
+          type: object
+          description: Component configuration
+          additionalProperties: true
+        metadata:
+          type: object
+          description: Additional metadata for the component
+          additionalProperties: true
+
+    ComponentListResponse:
+      type: object
+      required:
+        - components
+        - total
+        - limit
+        - offset
+      properties:
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/Component'
+        total:
+          type: integer
+          minimum: 0
+          description: Total number of components matching the query
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          description: Maximum number of components returned
+        offset:
+          type: integer
+          minimum: 0
+          description: Number of components skipped
+
+tags:
+  - name: System
+    description: System health and status endpoints
+  - name: Projects
+    description: Project management endpoints
+  - name: Components
+    description: Component management endpoints

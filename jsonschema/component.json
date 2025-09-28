@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.auren.dev/component-1.0.json",
+  "title": "Component",
+  "description": "Component schema for AurenWorks platform",
+  "type": "object",
+  "required": ["id", "name", "type", "status", "createdAt", "updatedAt"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Unique identifier for the component",
+      "example": "my-component"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Human-readable name for the component",
+      "example": "My Component"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Optional description of the component",
+      "example": "A sample component for demonstration"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["service", "database", "queue", "cache", "storage", "api", "worker", "scheduler"],
+      "description": "Type of the component"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "deploying", "failed", "pending"],
+      "description": "Status of the component"
+    },
+    "projectId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "ID of the project this component belongs to",
+      "example": "my-project"
+    },
+    "config": {
+      "type": "object",
+      "description": "Component configuration",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata for the component",
+      "additionalProperties": true
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the component was created"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the component was last updated"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "User ID who created the component",
+      "example": "user_123"
+    }
+  },
+  "additionalProperties": false
+}
