@@ -1,0 +1,113 @@
+name: Validate Schemas
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Validate schemas
+      run: npm run validate:schemas
+      
+    - name: Validate examples
+      run: npm run validate:examples
+      
+    - name: Lint OpenAPI specs
+      run: npm run validate:openapi
+      
+    - name: Check formatting
+      run: npm run format:check
+      
+    - name: Run all validations
+      run: npm run validate:all
+
+  cross-repo-impact:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check for breaking changes
+      run: |
+        echo "🔍 Checking for potential breaking changes..."
+        echo "📋 Consumer repositories that may be affected:"
+        echo "  - aurenworks/aurenworks-api"
+        echo "  - aurenworks/aurenworks-studio" 
+        echo "  - aurenworks/aurenworks-portal"
+        echo "  - aurenworks/aurenworks-worker"
+        echo "  - aurenworks/aurenworks-docs"
+        echo ""
+        echo "⚠️  If this PR contains breaking changes:"
+        echo "  1. Update CHANGELOG.md with migration notes"
+        echo "  2. Open issues in affected consumer repos"
+        echo "  3. Tag @aurenworks/team for coordination"
+        echo "  4. Ensure all validation passes"
+        
+    - name: Comment on PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+          
+          const schemaFiles = files.filter(file => 
+            file.filename.includes('jsonschema/') || 
+            file.filename.includes('openapi/') ||
+            file.filename.includes('mcp/')
+          );
+          
+          if (schemaFiles.length > 0) {
+            const comment = `🔍 **Schema Changes Detected**
+            
+            This PR modifies schema files that may impact consumer repositories:
+            
+            **Modified Files:**
+            ${schemaFiles.map(f => `- \`${f.filename}\``).join('\n')}
+            
+            **Consumer Impact:**
+            - \`aurenworks/aurenworks-api\` - API implementation and validation
+            - \`aurenworks/aurenworks-studio\` - UI forms and data binding  
+            - \`aurenworks/aurenworks-portal\` - Runtime data handling
+            - \`aurenworks/aurenworks-worker\` - Job processing and data transformation
+            - \`aurenworks/aurenworks-docs\` - API documentation generation
+            
+            **Next Steps:**
+            1. ✅ Ensure all validation passes
+            2. 📝 Update CHANGELOG.md if breaking changes
+            3. 🔗 Open issues in affected consumer repos
+            4. 👥 Tag @aurenworks/team for coordination
+            `;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+          }
