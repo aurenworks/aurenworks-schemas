@@ -14,11 +14,12 @@
   "scripts": {
     "dev": "npm run validate:all -- --watch",
     "validate:all": "npm run validate:schemas && npm run validate:examples && npm run validate:openapi",
-    "validate:schemas": "ajv validate -s jsonschema/**/*.json -d examples/**/*.json",
+    "validate:schemas": "node scripts/validate-schemas.js",
     "validate:examples": "node scripts/validate-examples.js",
-    "validate:openapi": "spectral lint openapi/**/*.yaml openapi/**/*.yml",
+    "validate:openapi": "node scripts/validate-openapi.js",
     "build": "npm run validate:all && npm run generate:types",
     "generate:types": "node scripts/generate-types.js",
+    "generate:typescript": "openapi-generator-cli generate -i openapi/control-plane-v0.yaml -g typescript-axios -o dist/typescript-client --additional-properties=typescriptThreePlus=true,npmName=@aurenworks/control-plane-client",
     "format": "prettier --write '**/*.{json,yaml,yml,js,ts,md}'",
     "format:check": "prettier --check '**/*.{json,yaml,yml,js,ts,md}'",
     "test": "npm run validate:all",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@stoplight/spectral-cli": "^6.11.0",
     "ajv": "^8.12.0",
     "ajv-cli": "^5.0.0",

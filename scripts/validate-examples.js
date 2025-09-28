@@ -11,7 +11,7 @@ const path = require('path');
 const Ajv = require('ajv');
 const addFormats = require('ajv-formats');
 
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
 
 const SCHEMAS_DIR = path.join(__dirname, '..', 'jsonschema');

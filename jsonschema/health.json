@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.auren.dev/health-1.0.json",
+  "title": "Health Response",
+  "description": "Health check response schema",
+  "type": "object",
+  "required": ["status", "timestamp"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["healthy", "unhealthy"],
+      "description": "Health status of the API"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the health check"
+    },
+    "version": {
+      "type": "string",
+      "description": "API version",
+      "example": "0.1.0"
+    },
+    "uptime": {
+      "type": "number",
+      "description": "API uptime in seconds",
+      "example": 3600
+    }
+  },
+  "additionalProperties": false
+}
