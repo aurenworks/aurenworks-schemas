@@ -13,6 +13,20 @@ info:
     
     ## Error Handling
     The API uses standard HTTP status codes and returns error details in a consistent format.
+    
+    ## CORS Support
+    The API supports Cross-Origin Resource Sharing (CORS) for browser-based clients.
+    All responses include CORS headers, and OPTIONS preflight requests are supported for all endpoints.
+    
+    **Allowed Origins:**
+    - Development: `http://localhost:5173`
+    - Production: TBD (studio domain)
+    
+    **Allowed Methods:** GET, POST, PUT, DELETE, OPTIONS
+    
+    **Allowed Headers:** Authorization, Content-Type, X-API-Key
+    
+    **Credentials:** Supported (cookies and authorization headers)
   version: 0.1.0
   contact:
     name: AurenWorks Team
@@ -46,16 +60,55 @@ paths:
       responses:
         '200':
           description: API is healthy
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
         '503':
           description: API is unhealthy
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    options:
+      summary: CORS Preflight for Health Check
+      description: Handle CORS preflight requests for the health check endpoint
+      operationId: optionsHealth
+      tags:
+        - System
+      security: []
+      responses:
+        '200':
+          description: CORS preflight response
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            Access-Control-Max-Age:
+              $ref: '#/components/headers/AccessControlMaxAge'
 
   /projects:
     get:
@@ -91,24 +144,60 @@ paths:
       responses:
         '200':
           description: List of projects
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectListResponse'
         '400':
           description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
@@ -129,34 +218,101 @@ paths:
       responses:
         '201':
           description: Project created successfully
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
         '400':
           description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Project already exists
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+    options:
+      summary: CORS Preflight for Projects
+      description: Handle CORS preflight requests for project endpoints
+      operationId: optionsProjects
+      tags:
+        - Projects
+      security: []
+      responses:
+        '200':
+          description: CORS preflight response
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            Access-Control-Max-Age:
+              $ref: '#/components/headers/AccessControlMaxAge'
 
   /projects/{projectId}:
     get:
@@ -178,24 +334,60 @@ paths:
       responses:
         '200':
           description: Project details
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Project not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
@@ -226,30 +418,75 @@ paths:
       responses:
         '200':
           description: Project updated successfully
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
         '400':
           description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Project not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
@@ -274,24 +511,92 @@ paths:
       responses:
         '204':
           description: Project deleted successfully
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Project not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+    options:
+      summary: CORS Preflight for Project
+      description: Handle CORS preflight requests for a specific project endpoint
+      operationId: optionsProject
+      tags:
+        - Projects
+      security: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '200':
+          description: CORS preflight response
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            Access-Control-Max-Age:
+              $ref: '#/components/headers/AccessControlMaxAge'
 
   /projects/{projectId}/components:
     get:
@@ -336,30 +641,75 @@ paths:
       responses:
         '200':
           description: List of components
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ComponentListResponse'
         '400':
           description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Project not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
@@ -390,40 +740,126 @@ paths:
       responses:
         '201':
           description: Component created successfully
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Component'
         '400':
           description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Project not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Component already exists
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+    options:
+      summary: CORS Preflight for Components
+      description: Handle CORS preflight requests for component endpoints
+      operationId: optionsComponents
+      tags:
+        - Components
+      security: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '200':
+          description: CORS preflight response
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            Access-Control-Max-Age:
+              $ref: '#/components/headers/AccessControlMaxAge'
 
 components:
   securitySchemes:
@@ -437,6 +873,45 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT token for authentication
+
+  headers:
+    AccessControlAllowOrigin:
+      schema:
+        type: string
+        example: "http://localhost:5173"
+      description: |
+        Allowed origin for CORS requests. In development, this is typically
+        `http://localhost:5173`. In production, this will be the studio domain.
+        The server may return `*` for public endpoints or a specific origin
+        for authenticated requests.
+    AccessControlAllowMethods:
+      schema:
+        type: string
+        example: "GET, POST, PUT, DELETE, OPTIONS"
+      description: |
+        Comma-separated list of HTTP methods allowed for CORS requests.
+        All endpoints support GET, POST, PUT, DELETE, and OPTIONS.
+    AccessControlAllowHeaders:
+      schema:
+        type: string
+        example: "Authorization, Content-Type, X-API-Key"
+      description: |
+        Comma-separated list of headers allowed in CORS requests.
+        Includes Authorization (for Bearer tokens), Content-Type, and X-API-Key.
+    AccessControlAllowCredentials:
+      schema:
+        type: boolean
+        example: true
+      description: |
+        Indicates whether credentials (cookies, authorization headers) are
+        allowed in CORS requests. Set to `true` to support authenticated requests.
+    AccessControlMaxAge:
+      schema:
+        type: integer
+        example: 86400
+      description: |
+        Maximum time (in seconds) that a browser can cache the preflight
+        response. Default is 86400 (24 hours).
 
   schemas:
     HealthResponse:
