@@ -906,7 +906,12 @@ components:
       description: |
         Indicates whether credentials (cookies, authorization headers) are
         allowed in CORS requests. Must be the literal string "true" when
-        credentials are supported. Omit this header when credentials are not allowed.
+        credentials are supported. **This header is optional** - implementations
+        should only include it when credentials are actually allowed for the
+        specific request. When credentials are not allowed, this header must be
+        omitted entirely (not set to "false"). Per OpenAPI 3.0, response headers
+        are optional by default, allowing implementations to conditionally include
+        this header based on request context.
     AccessControlMaxAge:
       schema:
         type: integer
