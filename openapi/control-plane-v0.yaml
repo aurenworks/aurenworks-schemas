@@ -900,11 +900,13 @@ components:
         Includes Authorization (for Bearer tokens), Content-Type, and X-API-Key.
     AccessControlAllowCredentials:
       schema:
-        type: boolean
-        example: true
+        type: string
+        enum: ["true"]
+        example: "true"
       description: |
         Indicates whether credentials (cookies, authorization headers) are
-        allowed in CORS requests. Set to `true` to support authenticated requests.
+        allowed in CORS requests. Must be the literal string "true" when
+        credentials are supported. Omit this header when credentials are not allowed.
     AccessControlMaxAge:
       schema:
         type: integer
