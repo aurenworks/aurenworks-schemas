@@ -16,7 +16,10 @@ info:
     
     ## CORS Support
     The API supports Cross-Origin Resource Sharing (CORS) for browser-based clients.
-    All responses include CORS headers, and OPTIONS preflight requests are supported for all endpoints.
+    All responses include `Access-Control-Allow-Origin` and conditionally include
+    `Access-Control-Allow-Credentials`. The `Access-Control-Allow-Methods` and
+    `Access-Control-Allow-Headers` headers are only sent in response to OPTIONS
+    preflight requests, as per the CORS specification (RFC 6454).
     
     **Allowed Origins:**
     - Development: `http://localhost:5173`
@@ -63,10 +66,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -78,10 +77,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -147,10 +142,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -162,10 +153,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -177,10 +164,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -192,10 +175,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -221,10 +200,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -236,10 +211,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -251,10 +222,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -266,10 +233,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -281,10 +244,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -337,10 +296,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -352,10 +307,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -367,10 +318,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -382,10 +329,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -421,10 +364,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -436,10 +375,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -451,10 +386,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -466,10 +397,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -481,10 +408,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -514,10 +437,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
         '401':
@@ -525,10 +444,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -540,10 +455,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -555,10 +466,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -644,10 +551,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -659,10 +562,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -674,10 +573,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -689,10 +584,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -704,10 +595,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -743,10 +630,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -758,10 +641,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -773,10 +652,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -788,10 +663,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -803,10 +674,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
@@ -818,10 +685,6 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               $ref: '#/components/headers/AccessControlAllowOrigin'
-            Access-Control-Allow-Methods:
-              $ref: '#/components/headers/AccessControlAllowMethods'
-            Access-Control-Allow-Headers:
-              $ref: '#/components/headers/AccessControlAllowHeaders'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
           content:
