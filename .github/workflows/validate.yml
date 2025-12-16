@@ -46,6 +46,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v6
@@ -88,14 +93,14 @@ jobs:
             This PR modifies schema files that may impact consumer repositories:
             
             **Modified Files:**
-            ${schemaFiles.map(f => `- \`${f.filename}\``).join('\n')}
+            ${schemaFiles.map(f => '- `' + f.filename + '`').join('\n')}
             
             **Consumer Impact:**
-            - \`aurenworks/aurenworks-api\` - API implementation and validation
-            - \`aurenworks/aurenworks-studio\` - UI forms and data binding  
-            - \`aurenworks/aurenworks-portal\` - Runtime data handling
-            - \`aurenworks/aurenworks-worker\` - Job processing and data transformation
-            - \`aurenworks/aurenworks-docs\` - API documentation generation
+            - `aurenworks/aurenworks-api` - API implementation and validation
+            - `aurenworks/aurenworks-studio` - UI forms and data binding  
+            - `aurenworks/aurenworks-portal` - Runtime data handling
+            - `aurenworks/aurenworks-worker` - Job processing and data transformation
+            - `aurenworks/aurenworks-docs` - API documentation generation
             
             **Next Steps:**
             1. ✅ Ensure all validation passes
