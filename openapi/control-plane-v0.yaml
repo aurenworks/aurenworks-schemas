@@ -632,6 +632,8 @@ paths:
               $ref: '#/components/headers/AccessControlAllowOrigin'
             Access-Control-Allow-Credentials:
               $ref: '#/components/headers/AccessControlAllowCredentials'
+            ETag:
+              $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
@@ -724,6 +726,253 @@ paths:
             Access-Control-Max-Age:
               $ref: '#/components/headers/AccessControlMaxAge'
 
+  /projects/{projectId}/components/{componentId}:
+    get:
+      summary: Get Component
+      description: Retrieve a specific component by ID
+      operationId: getComponent
+      tags:
+        - Components
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+        - name: componentId
+          in: path
+          required: true
+          description: Unique identifier for the component
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '200':
+          description: Component details
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Component'
+        '401':
+          description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Component not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update Component
+      description: |
+        Update an existing component. This endpoint supports optimistic concurrency
+        control via ETags. Include the If-Match header with the ETag value from
+        the most recent GET request to prevent concurrent modification conflicts.
+      operationId: updateComponent
+      tags:
+        - Components
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+        - name: componentId
+          in: path
+          required: true
+          description: Unique identifier for the component
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+        - name: If-Match
+          in: header
+          required: true
+          description: |
+            ETag value from the most recent GET request for this component.
+            The update will only proceed if the ETag matches the current resource version.
+          schema:
+            type: string
+            example: '"abc123def456"'
+          style: simple
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateComponentRequest'
+      responses:
+        '200':
+          description: Component updated successfully
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Component'
+        '400':
+          description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Component not found
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: |
+            Conflict - The resource has been modified since the last GET request.
+            The ETag in the If-Match header does not match the current resource version.
+            The client should fetch the latest version and retry the update.
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+        '412':
+          description: |
+            Precondition Failed - The If-Match header is missing or invalid.
+            The client must include a valid If-Match header with the ETag value.
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    options:
+      summary: CORS Preflight for Component
+      description: Handle CORS preflight requests for a specific component endpoint
+      operationId: optionsComponent
+      tags:
+        - Components
+      security: []
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: Unique identifier for the project
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+        - name: componentId
+          in: path
+          required: true
+          description: Unique identifier for the component
+          schema:
+            type: string
+            pattern: '^[a-zA-Z0-9_-]+$'
+            minLength: 1
+            maxLength: 64
+      responses:
+        '200':
+          description: CORS preflight response
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/AccessControlAllowOrigin'
+            Access-Control-Allow-Methods:
+              $ref: '#/components/headers/AccessControlAllowMethods'
+            Access-Control-Allow-Headers:
+              $ref: '#/components/headers/AccessControlAllowHeaders'
+            Access-Control-Allow-Credentials:
+              $ref: '#/components/headers/AccessControlAllowCredentials'
+            Access-Control-Max-Age:
+              $ref: '#/components/headers/AccessControlMaxAge'
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -757,10 +1006,36 @@ components:
     AccessControlAllowHeaders:
       schema:
         type: string
-        example: "Authorization, Content-Type, X-API-Key"
+        example: "Authorization, Content-Type, X-API-Key, If-Match"
       description: |
         Comma-separated list of headers allowed in CORS requests.
-        Includes Authorization (for Bearer tokens), Content-Type, and X-API-Key.
+        Includes Authorization (for Bearer tokens), Content-Type, X-API-Key, and If-Match (for optimistic concurrency control).
+    ETag:
+      schema:
+        type: string
+        example: '"abc123def456"'
+      description: |
+        Entity tag for optimistic concurrency control. The ETag is a quoted string
+        that represents the current version of the resource. Clients should include
+        this value in the If-Match header when updating the resource to prevent
+        concurrent modification conflicts.
+        
+        **Format:** The ETag value is always a quoted string (e.g., `"abc123"`).
+        When comparing ETags, implementations must use strong comparison as per
+        RFC 7232.
+    IfMatch:
+      schema:
+        type: string
+        example: '"abc123def456"'
+      description: |
+        Conditional request header for optimistic concurrency control. The client
+        must include the ETag value received from a previous GET request when
+        updating a resource. If the ETag does not match the current resource
+        version, the server will return a 409 Conflict response.
+        
+        **Format:** The If-Match value must be a quoted string matching the ETag
+        from the resource's last response. The value `*` can be used to match any
+        existing resource, but this is not recommended for component updates.
     AccessControlAllowCredentials:
       schema:
         type: string
@@ -1081,6 +1356,92 @@ components:
           type: object
           description: Additional metadata for the component
           additionalProperties: true
+
+    UpdateComponentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Human-readable name for the component
+          example: "My Updated Component"
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description of the component
+          example: "An updated description"
+        type:
+          $ref: '#/components/schemas/ComponentType'
+        status:
+          $ref: '#/components/schemas/ComponentStatus'
+        config:
+          type: object
+          description: Component configuration
+          additionalProperties: true
+        metadata:
+          type: object
+          description: Additional metadata for the component
+          additionalProperties: true
+
+    ConflictErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+        - timestamp
+        - conflict
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "CONCURRENT_MODIFICATION"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "The resource has been modified since your last request. Please fetch the latest version and try again."
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the conflict was detected
+        conflict:
+          type: object
+          required:
+            - resourceType
+            - resourceId
+            - currentETag
+            - providedETag
+          properties:
+            resourceType:
+              type: string
+              description: Type of resource that conflicted
+              example: "component"
+            resourceId:
+              type: string
+              description: Identifier of the conflicting resource
+              example: "my-component"
+            currentETag:
+              type: string
+              description: Current ETag value of the resource
+              example: '"xyz789"'
+            providedETag:
+              type: string
+              description: ETag value provided in the If-Match header
+              example: '"abc123"'
+          description: Details about the concurrency conflict
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+        requestId:
+          type: string
+          description: Unique identifier for the request
+          example: "req_123456789"
+      description: |
+        Error response returned when a 409 Conflict occurs due to optimistic
+        concurrency control. The resource has been modified since the client's
+        last GET request, and the ETag in the If-Match header does not match
+        the current resource version.
 
     ComponentListResponse:
       type: object
